@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="iDesk Lite" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>iDesk Lite</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111827;
+      --panel-2: #182033;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --line: rgba(255,255,255,.12);
+      --accent: #60a5fa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --danger: #f87171;
+      --fontSize: 18px;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+    body { overflow: hidden; }
+    button, input, textarea { font: inherit; }
+    .app { height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+    .topbar, .statusbar { background: rgba(17,24,39,.92); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 14px 45px rgba(0,0,0,.22); }
+    .topbar { justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .logo { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #60a5fa, #34d399); display: grid; place-items: center; color: #06111f; font-weight: 900; }
+    .title { line-height: 1.15; min-width: 0; }
+    .title strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .title span { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn { border: 1px solid var(--line); color: var(--text); background: #1f2937; border-radius: 12px; padding: 9px 11px; cursor: pointer; }
+    .btn.primary { background: #2563eb; border-color: rgba(255,255,255,.2); }
+    .btn.good { background: #047857; }
+    .btn.warn { background: #92400e; }
+    .btn:active { transform: translateY(1px); }
+    .workspace { min-height: 0; display: grid; grid-template-columns: 220px minmax(0,1fr) 300px; gap: 10px; }
+    .panel { min-height: 0; border: 1px solid var(--line); background: rgba(17,24,39,.9); border-radius: var(--radius); overflow: hidden; box-shadow: 0 14px 45px rgba(0,0,0,.22); }
+    .panelHead { height: 44px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: rgba(255,255,255,.03); }
+    .panelHead b { font-size: 14px; }
+    .panelBody { height: calc(100% - 44px); min-height: 0; padding: 12px; overflow: auto; }
+    .nav { display: grid; gap: 8px; }
+    .nav button { width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 14px; padding: 12px; cursor: pointer; }
+    .nav button.active { outline: 2px solid var(--accent); background: rgba(96,165,250,.15); }
+    .hint { color: var(--muted); font-size: 13px; line-height: 1.45; margin-top: 12px; }
+    .main { display: grid; grid-template-rows: auto 1fr; }
+    .modeTabs { display: flex; gap: 8px; padding: 12px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.03); flex-wrap: wrap; }
+    .modeTabs button { border: 1px solid var(--line); background: #1f2937; color: var(--text); border-radius: 999px; padding: 8px 12px; }
+    .modeTabs button.active { background: #2563eb; }
+    .content { min-height: 0; padding: 12px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 42%); gap: 12px; }
+    .editorWrap, .previewWrap { min-height: 0; display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.03); }
+    .subHead { padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 8px; }
+    textarea { width: 100%; height: 100%; min-height: 0; resize: none; border: 0; outline: none; background: #0f172a; color: var(--text); padding: 16px; font-size: var(--fontSize); line-height: 1.55; }
+    .preview { padding: 16px; font-size: var(--fontSize); line-height: 1.55; white-space: pre-wrap; overflow: auto; }
+    .placeholder { color: var(--muted); font-size: var(--fontSize); line-height: 1.55; }
+    .inspectorGrid { display: grid; gap: 10px; }
+    .metric { padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.03); }
+    .metric label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .metric strong { font-size: 15px; }
+    .log { font-size: 12px; color: #d1d5db; line-height: 1.45; max-height: 180px; overflow: auto; white-space: pre-wrap; }
+    .touchpad { height: 160px; border: 1px dashed rgba(255,255,255,.25); border-radius: 16px; display: grid; place-items: center; color: var(--muted); user-select: none; touch-action: none; background: rgba(0,0,0,.18); }
+    .statusbar { justify-content: space-between; color: var(--muted); font-size: 13px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: rgba(255,255,255,.04); border-radius: 999px; padding: 6px 10px; white-space: nowrap; }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--ok); }
+    .cursor { position: fixed; z-index: 1000; width: 22px; height: 22px; pointer-events: none; transform: translate(-3px, -3px); filter: drop-shadow(0 3px 6px rgba(0,0,0,.45)); }
+    .cursor:before { content: ""; display: block; width: 0; height: 0; border-top: 20px solid white; border-right: 13px solid transparent; transform: rotate(-18deg); }
+    .command { position: fixed; inset: 0; display: none; place-items: start center; padding-top: 12vh; background: rgba(0,0,0,.48); z-index: 999; }
+    .command.show { display: grid; }
+    .commandBox { width: min(720px, calc(100vw - 28px)); border: 1px solid var(--line); border-radius: 22px; background: #111827; padding: 14px; box-shadow: 0 35px 120px rgba(0,0,0,.6); }
+    .commandBox input { width: 100%; border: 1px solid var(--line); border-radius: 14px; background: #0f172a; color: var(--text); padding: 14px; outline: none; }
+    .commandList { margin-top: 12px; display: grid; gap: 8px; }
+    .commandList div { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; color: #d1d5db; }
+    .presentation .workspace { grid-template-columns: 0 minmax(0,1fr) 0; }
+    .presentation .sidebar, .presentation .inspector, .presentation .statusbar { display: none; }
+    .presentation .content { grid-template-columns: 1fr; }
+    .presentation .editorWrap { display: none; }
+    .presentation .topbar { opacity: .92; }
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100dvh; overflow: auto; }
+      .workspace { grid-template-columns: 1fr; }
+      .content { grid-template-columns: 1fr; }
+      .panel { min-height: 220px; }
+      .inspector .panelBody { max-height: none; }
+      .statusbar { align-items: flex-start; flex-direction: column; }
+    }
+    @media (orientation: portrait) {
+      .landscapeWarn { display: inline-flex; }
+    }
+    @media (orientation: landscape) {
+      .landscapeWarn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="command" id="command">
+    <div class="commandBox">
+      <input id="commandInput" placeholder="명령 입력: notes, big, small, present, reset" />
+      <div class="commandList">
+        <div><b>⌘/Ctrl + K</b> 명령창 열기/닫기</div>
+        <div><b>⌘/Ctrl + 1/2/3</b> Notes / Web / PDF 전환</div>
+        <div><b>⌘/Ctrl + +/-</b> 글자 크기 조절</div>
+        <div><b>방향키</b> 가상 커서 이동</div>
+      </div>
+    </div>
+  </div>
+
+  <main class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">D</div>
+        <div class="title">
+          <strong>iDesk Lite</strong>
+          <span>무료 웹앱 버전 · HDMI 미러링 최적화</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="presentBtn">모니터 모드</button>
+        <button class="btn" id="biggerBtn">A+</button>
+        <button class="btn" id="smallerBtn">A-</button>
+        <button class="btn good" id="saveBtn">저장</button>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="panel sidebar">
+        <div class="panelHead"><b>Modules</b><span class="badge landscapeWarn"><span class="dot" style="background:var(--warn)"></span>가로 권장</span></div>
+        <div class="panelBody">
+          <nav class="nav">
+            <button class="active" data-mode="notes">📝 Notes</button>
+            <button data-mode="web">🌐 Web memo</button>
+            <button data-mode="pdf">📄 PDF checklist</button>
+            <button data-mode="remote">🖥 Remote placeholder</button>
+          </nav>
+          <p class="hint">돈 안 내는 버전은 iOS 앱이 아니라 웹앱입니다. HDMI는 분리 화면이 아니라 미러링이므로, iPhone을 가로로 돌리고 ‘모니터 모드’를 켜서 크게 보는 방식입니다.</p>
+        </div>
+      </aside>
+
+      <section class="panel main">
+        <div class="modeTabs">
+          <button class="active" data-mode="notes">Notes</button>
+          <button data-mode="web">Web</button>
+          <button data-mode="pdf">PDF</button>
+          <button data-mode="remote">Remote</button>
+        </div>
+        <div class="content">
+          <div class="editorWrap">
+            <div class="subHead"><span>입력창</span><span id="count">0자</span></div>
+            <textarea id="note" spellcheck="false" placeholder="여기에 입력하세요. HDMI 모니터에는 같은 화면이 미러링됩니다.\n\n추천 사용법:\n1) iPhone을 가로로 돌리기\n2) Safari 공유 → 홈 화면에 추가\n3) 모니터 모드 켜기\n4) 키보드로 입력하기"></textarea>
+          </div>
+          <div class="previewWrap">
+            <div class="subHead"><span id="previewTitle">모니터용 보기</span><span id="modeName">Notes</span></div>
+            <div class="preview" id="preview"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel inspector">
+        <div class="panelHead"><b>Input / Hardware</b><span class="badge"><span class="dot"></span>Web</span></div>
+        <div class="panelBody inspectorGrid">
+          <div class="metric"><label>화면</label><strong id="screenMetric">-</strong></div>
+          <div class="metric"><label>포인터</label><strong id="pointerMetric">대기 중</strong></div>
+          <div class="metric"><label>키보드</label><strong id="keyMetric">대기 중</strong></div>
+          <div class="touchpad" id="touchpad">터치패드 테스트 영역<br/>드래그 · 탭 · 스크롤</div>
+          <div class="metric"><label>로그</label><div class="log" id="log"></div></div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="statusbar">
+      <span>무료판 한계: iPhone 화면과 모니터가 분리되지 않고 같은 화면이 보입니다.</span>
+      <span>권장: 홈 화면에 추가 → 가로모드 → HDMI 연결 → 모니터 모드</span>
+    </footer>
+  </main>
+
+  <script>
+    const $ = (q) => document.querySelector(q);
+    const $$ = (q) => Array.from(document.querySelectorAll(q));
+    const app = $('#app');
+    const note = $('#note');
+    const preview = $('#preview');
+    const count = $('#count');
+    const modeName = $('#modeName');
+    const previewTitle = $('#previewTitle');
+    const logEl = $('#log');
+    const cursor = $('#cursor');
+    const command = $('#command');
+    const commandInput = $('#commandInput');
+    let mode = 'notes';
+    let fontSize = Number(localStorage.getItem('idesk_font') || 18);
+    let cursorPos = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.55 };
+    let lastTouch = null;
+
+    note.value = localStorage.getItem('idesk_note') || '';
+    document.documentElement.style.setProperty('--fontSize', fontSize + 'px');
+
+    function log(msg) {
+      const t = new Date().toLocaleTimeString();
+      logEl.textContent = `[${t}] ${msg}\n` + logEl.textContent.slice(0, 1800);
+    }
+
+    function updateScreen() {
+      $('#screenMetric').textContent = `${window.innerWidth}×${window.innerHeight} / ${screen.width}×${screen.height}`;
+    }
+
+    function render() {
+      count.textContent = `${note.value.length}자`;
+      localStorage.setItem('idesk_note', note.value);
+      if (mode === 'notes') {
+        previewTitle.textContent = '모니터용 보기';
+        preview.textContent = note.value || '입력창에 내용을 쓰면 여기에 크게 표시됩니다.';
+      } else if (mode === 'web') {
+        previewTitle.textContent = 'Web memo';
+        preview.innerHTML = '<div class="placeholder">무료 웹앱 버전의 Web 모듈입니다.<br><br>실제 브라우저 탭을 앱 안에서 띄우는 건 네이티브 앱에서 구현해야 합니다. 지금은 링크/검색어/업무 메모를 크게 표시하는 용도입니다.<br><br>' + escapeHtml(note.value || '예: https://example.com\n검색어: HDMI iPhone external monitor') + '</div>';
+      } else if (mode === 'pdf') {
+        previewTitle.textContent = 'PDF checklist';
+        preview.innerHTML = '<div class="placeholder">PDF 무료판 체크리스트<br><br>1. PDF 파일은 Safari/Files에서 직접 열기<br>2. 이 웹앱은 PDF 작업 메모용으로 사용<br>3. 유료 네이티브 앱 버전에서 PDF 뷰어를 붙일 수 있음<br><br>' + escapeHtml(note.value) + '</div>';
+      } else {
+        previewTitle.textContent = 'Remote placeholder';
+        preview.innerHTML = '<div class="placeholder">원격 데스크톱은 무료 웹앱에서 직접 구현하기 어렵습니다.<br><br>대안: Chrome Remote Desktop, Microsoft Remote Desktop, AnyDesk 같은 기존 앱/웹을 사용하고 이 화면은 작업 메모로 사용하세요.<br><br>' + escapeHtml(note.value) + '</div>';
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    function setMode(next) {
+      mode = next;
+      modeName.textContent = next[0].toUpperCase() + next.slice(1);
+      $$('[data-mode]').forEach(b => b.classList.toggle('active', b.dataset.mode === next));
+      log(`mode: ${next}`);
+      render();
+    }
+
+    function moveCursor(dx, dy) {
+      cursorPos.x = Math.max(0, Math.min(window.innerWidth - 20, cursorPos.x + dx));
+      cursorPos.y = Math.max(0, Math.min(window.innerHeight - 20, cursorPos.y + dy));
+      cursor.style.left = cursorPos.x + 'px';
+      cursor.style.top = cursorPos.y + 'px';
+      $('#pointerMetric').textContent = `${Math.round(cursorPos.x)}, ${Math.round(cursorPos.y)}`;
+    }
+
+    function setFont(next) {
+      fontSize = Math.max(12, Math.min(34, next));
+      document.documentElement.style.setProperty('--fontSize', fontSize + 'px');
+      localStorage.setItem('idesk_font', fontSize);
+      log(`font size: ${fontSize}px`);
+    }
+
+    function togglePresentation() {
+      app.classList.toggle('presentation');
+      $('#presentBtn').textContent = app.classList.contains('presentation') ? '일반 모드' : '모니터 모드';
+      log(app.classList.contains('presentation') ? 'presentation mode on' : 'presentation mode off');
+    }
+
+    function toggleCommand() {
+      command.classList.toggle('show');
+      if (command.classList.contains('show')) {
+        commandInput.value = '';
+        setTimeout(() => commandInput.focus(), 50);
+      }
+    }
+
+    $$('.nav button, .modeTabs button').forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+    note.addEventListener('input', render);
+    $('#saveBtn').addEventListener('click', () => { localStorage.setItem('idesk_note', note.value); log('saved'); });
+    $('#biggerBtn').addEventListener('click', () => setFont(fontSize + 2));
+    $('#smallerBtn').addEventListener('click', () => setFont(fontSize - 2));
+    $('#presentBtn').addEventListener('click', togglePresentation);
+
+    document.addEventListener('keydown', (e) => {
+      const mod = e.metaKey || e.ctrlKey;
+      $('#keyMetric').textContent = `${mod ? '⌘/Ctrl+' : ''}${e.key}`;
+      log(`key: ${mod ? 'mod+' : ''}${e.key}`);
+      if (mod && e.key.toLowerCase() === 'k') { e.preventDefault(); toggleCommand(); }
+      if (mod && e.key === '1') { e.preventDefault(); setMode('notes'); }
+      if (mod && e.key === '2') { e.preventDefault(); setMode('web'); }
+      if (mod && e.key === '3') { e.preventDefault(); setMode('pdf'); }
+      if (mod && (e.key === '=' || e.key === '+')) { e.preventDefault(); setFont(fontSize + 2); }
+      if (mod && e.key === '-') { e.preventDefault(); setFont(fontSize - 2); }
+      if (e.key === 'ArrowLeft') moveCursor(-18,0);
+      if (e.key === 'ArrowRight') moveCursor(18,0);
+      if (e.key === 'ArrowUp') moveCursor(0,-18);
+      if (e.key === 'ArrowDown') moveCursor(0,18);
+      if (e.key === 'Escape' && command.classList.contains('show')) toggleCommand();
+    });
+
+    commandInput.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const v = commandInput.value.trim().toLowerCase();
+      if (['notes','web','pdf','remote'].includes(v)) setMode(v);
+      if (v === 'big') setFont(fontSize + 2);
+      if (v === 'small') setFont(fontSize - 2);
+      if (v === 'present') togglePresentation();
+      if (v === 'reset') { note.value = ''; render(); }
+      toggleCommand();
+    });
+
+    document.addEventListener('pointermove', (e) => {
+      cursorPos.x = e.clientX;
+      cursorPos.y = e.clientY;
+      moveCursor(0,0);
+    }, { passive: true });
+    document.addEventListener('pointerdown', (e) => log(`pointer down: ${Math.round(e.clientX)}, ${Math.round(e.clientY)}`), { passive: true });
+    document.addEventListener('wheel', (e) => log(`wheel: ${Math.round(e.deltaX)}, ${Math.round(e.deltaY)}`), { passive: true });
+
+    const touchpad = $('#touchpad');
+    touchpad.addEventListener('pointerdown', (e) => { lastTouch = { x: e.clientX, y: e.clientY }; touchpad.setPointerCapture(e.pointerId); log('touchpad down'); });
+    touchpad.addEventListener('pointermove', (e) => {
+      if (!lastTouch) return;
+      const dx = (e.clientX - lastTouch.x) * 1.8;
+      const dy = (e.clientY - lastTouch.y) * 1.8;
+      lastTouch = { x: e.clientX, y: e.clientY };
+      moveCursor(dx, dy);
+    });
+    touchpad.addEventListener('pointerup', (e) => { lastTouch = null; log('touchpad click/up'); });
+    touchpad.addEventListener('contextmenu', (e) => { e.preventDefault(); log('right click / long press'); });
+
+    window.addEventListener('resize', updateScreen);
+    updateScreen();
+    moveCursor(0,0);
+    render();
+    log('ready');
+  </script>
+</body>
+</html>
