@@ -9,131 +9,412 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>iDesk Lite · PC Web Mode</title>
+  <title>iDesk Lite · Elegant Web Desk</title>
   <style>
     :root {
-      --bg: #07101f;
-      --panel: #0f172a;
-      --panel2: #111827;
-      --panel3: #172033;
-      --line: rgba(255,255,255,.13);
-      --text: #f9fafb;
-      --muted: #a7b0c2;
-      --accent: #60a5fa;
-      --accent2: #34d399;
-      --warn: #fbbf24;
+      --bg: #07111f;
+      --bg2: #0b1730;
+      --panel: rgba(10, 18, 34, 0.78);
+      --panel-strong: rgba(12, 20, 38, 0.92);
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.03);
+      --line: rgba(255,255,255,.10);
+      --line-strong: rgba(255,255,255,.18);
+      --text: #f8fafc;
+      --muted: #9fb0c8;
+      --soft: #d8e2f1;
+      --blue: #5aa2ff;
+      --blue2: #7c3aed;
+      --mint: #3dd6b0;
+      --orange: #f59e0b;
       --danger: #fb7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.34);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
       --fontSize: 18px;
       --pcW: 1440px;
       --pcH: 900px;
       --scale: .5;
-      --radius: 18px;
     }
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
-    body { overflow: hidden; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(90,162,255,.23), transparent 30%),
+        radial-gradient(circle at 100% 0%, rgba(124,58,237,.16), transparent 28%),
+        radial-gradient(circle at 85% 100%, rgba(61,214,176,.14), transparent 25%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      color: var(--text);
+      overflow: hidden;
+    }
+    body:before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+      opacity: .35;
+    }
     button, input, textarea, select { font: inherit; }
     button { cursor: pointer; }
-    .app { height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); }
-    .topbar, .statusbar { border: 1px solid var(--line); background: rgba(15,23,42,.94); border-radius: var(--radius); box-shadow: 0 15px 50px rgba(0,0,0,.24); }
-    .topbar { min-height: 58px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .brand { min-width: 0; display: flex; align-items: center; gap: 10px; }
-    .logo { width: 34px; height: 34px; border-radius: 11px; background: linear-gradient(135deg,#60a5fa,#34d399); color: #04111f; font-weight: 900; display: grid; place-items: center; }
-    .title { min-width: 0; line-height: 1.15; }
-    .title strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .title span { color: var(--muted); font-size: 12px; white-space: nowrap; }
-    .actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
-    .btn { border: 1px solid var(--line); color: var(--text); background: #1f2937; border-radius: 12px; padding: 9px 11px; min-height: 38px; }
-    .btn.primary { background: #2563eb; }
-    .btn.good { background: #047857; }
-    .btn.warn { background: #92400e; }
-    .btn.danger { background: #9f1239; }
-    .btn.ghost { background: rgba(255,255,255,.04); }
-    .btn:active { transform: translateY(1px); }
+    .app {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 14px;
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    }
+    .surface {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      box-shadow: var(--shadow);
+    }
+    .topbar {
+      min-height: 78px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+    .brand { min-width: 0; display: flex; align-items: center; gap: 14px; }
+    .logo {
+      width: 44px; height: 44px; border-radius: 16px;
+      display: grid; place-items: center;
+      font-weight: 900; font-size: 18px; letter-spacing: .02em;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue2) 65%, var(--mint));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px rgba(90,162,255,.25);
+    }
+    .title { min-width: 0; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--line);
+      color: var(--soft); font-size: 12px; margin-bottom: 8px;
+    }
+    .eyebrowDot { width: 8px; height: 8px; border-radius: 999px; background: var(--mint); box-shadow: 0 0 12px rgba(61,214,176,.75); }
+    .title strong { display: block; font-size: 20px; line-height: 1.15; letter-spacing: -.02em; }
+    .title span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
-    .workspace { min-height: 0; display: grid; grid-template-columns: 235px minmax(0,1fr) 310px; gap: 10px; }
-    .panel { min-height: 0; border: 1px solid var(--line); background: rgba(15,23,42,.92); border-radius: var(--radius); overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,.22); }
-    .panelHead { height: 44px; padding: 0 12px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.035); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .panelHead b { font-size: 14px; }
-    .panelBody { height: calc(100% - 44px); min-height: 0; padding: 12px; overflow: auto; }
-    .nav { display: grid; gap: 8px; }
-    .nav button { width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--panel3); color: var(--text); }
-    .nav button.active { background: rgba(96,165,250,.16); outline: 2px solid var(--accent); }
-    .hint { color: var(--muted); font-size: 13px; line-height: 1.45; }
-    .hint b { color: #e5e7eb; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: rgba(255,255,255,.055); border-radius: 999px; padding: 5px 9px; color: #d1d5db; font-size: 12px; white-space: nowrap; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); }
+    .btn {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      color: var(--text);
+      border-radius: 14px;
+      min-height: 42px;
+      padding: 10px 14px;
+      transition: transform .12s ease, border-color .18s ease, background .18s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .btn:hover { border-color: var(--line-strong); }
+    .btn:active { transform: translateY(1px) scale(.995); }
+    .btn.primary { background: linear-gradient(135deg, var(--blue), #357df2); border-color: rgba(90,162,255,.5); }
+    .btn.good { background: linear-gradient(135deg, #0f8f6d, var(--mint)); color: #06211a; border-color: rgba(61,214,176,.45); font-weight: 700; }
+    .btn.warn { background: linear-gradient(135deg, #9a5d00, #f59e0b); }
+    .btn.ghost { background: rgba(255,255,255,.035); }
+
+    .heroStrip {
+      display: grid; grid-template-columns: 1.45fr .85fr; gap: 14px;
+    }
+    .heroCard, .quickCard {
+      padding: 16px 18px;
+      min-height: 98px;
+      display: grid; align-items: center;
+    }
+    .heroTitle { font-size: 16px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 6px; }
+    .heroText { color: var(--muted); line-height: 1.5; font-size: 13px; }
+    .heroTags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 11px; border-radius: 999px;
+      font-size: 12px; color: #dfe8f8;
+      background: rgba(255,255,255,.04); border: 1px solid var(--line);
+    }
+    .tag strong { font-size: 12px; }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr) 320px;
+      gap: 14px;
+    }
+    .panel {
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .panelHead {
+      min-height: 56px;
+      padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+    }
+    .panelHead b { font-size: 14px; letter-spacing: .01em; }
+    .panelBody { min-height: 0; overflow: auto; padding: 14px; }
+
+    .nav { display: grid; gap: 10px; }
+    .nav button {
+      width: 100%; text-align: left;
+      border-radius: 16px; border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      color: var(--text); padding: 14px 14px;
+    }
+    .nav button.active {
+      background: linear-gradient(135deg, rgba(90,162,255,.28), rgba(124,58,237,.22));
+      border-color: rgba(90,162,255,.5);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .navLabel { display: block; font-weight: 700; font-size: 14px; }
+    .navDesc { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    .hint {
+      margin-top: 14px; padding: 14px; border-radius: 16px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--line);
+      color: var(--muted); font-size: 13px; line-height: 1.55;
+    }
+    .hint b { color: #eef5ff; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px;
+      font-size: 12px; color: #e6eefc;
+      background: rgba(255,255,255,.05); border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--mint); }
 
     .main { display: grid; grid-template-rows: auto 1fr; }
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.03); }
-    .tabs button { border: 1px solid var(--line); color: var(--text); background: #1f2937; border-radius: 999px; padding: 8px 12px; }
-    .tabs button.active { background: #2563eb; }
+    .tabs {
+      padding: 10px 14px;
+      display: flex; gap: 8px; flex-wrap: wrap;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .tabs button {
+      border: 1px solid var(--line);
+      border-radius: 999px; padding: 8px 13px;
+      color: var(--soft);
+      background: rgba(255,255,255,.04);
+    }
+    .tabs button.active {
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      border-color: rgba(90,162,255,.55);
+      color: white;
+    }
     .content { min-height: 0; }
     .view { display: none; height: 100%; min-height: 0; }
     .view.active { display: grid; }
 
-    .webView { grid-template-rows: auto 1fr; }
-    .browserBar { padding: 10px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.025); display: grid; grid-template-columns: minmax(0,1fr) auto auto auto; gap: 8px; align-items: center; }
-    .urlInput { min-width: 0; border: 1px solid var(--line); border-radius: 13px; background: #030712; color: var(--text); padding: 10px 12px; outline: none; }
-    .urlInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(96,165,250,.16); }
-    .controlsRow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 8px 10px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; background: rgba(0,0,0,.15); }
-    select { border: 1px solid var(--line); background: #111827; color: var(--text); border-radius: 10px; padding: 6px 8px; }
-    .pcStage { min-height: 0; display: grid; grid-template-rows: auto 1fr; }
-    .quick { display: flex; gap: 7px; flex-wrap: wrap; padding: 8px 10px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.02); }
-    .quick button { border: 1px solid var(--line); background: #172033; color: #dbeafe; border-radius: 999px; padding: 7px 10px; font-size: 12px; }
-    .frameViewport { position: relative; overflow: auto; min-height: 0; background: #111827; }
-    .frameBackdrop { position: absolute; inset: 12px; border: 1px dashed rgba(255,255,255,.18); border-radius: 16px; display: grid; place-items: center; text-align: center; color: var(--muted); line-height: 1.55; padding: 20px; pointer-events: none; }
-    .frameShell { position: relative; margin: 14px auto; width: calc(var(--pcW) * var(--scale)); height: calc(var(--pcH) * var(--scale)); min-width: 260px; min-height: 180px; }
-    .frameInner { width: var(--pcW); height: var(--pcH); transform: scale(var(--scale)); transform-origin: top left; border-radius: 14px; overflow: hidden; background: white; box-shadow: 0 30px 90px rgba(0,0,0,.45); }
+    .browserBar {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto auto auto;
+      gap: 8px; align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .urlInput {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(0,0,0,.32);
+      color: white; padding: 12px 14px;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .urlInput:focus { border-color: rgba(90,162,255,.55); box-shadow: 0 0 0 3px rgba(90,162,255,.18); }
+    .pcStage { min-height: 0; display: grid; grid-template-rows: auto auto 1fr; }
+    .controlsRow {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted); font-size: 12px;
+      background: rgba(255,255,255,.02);
+    }
+    select {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text); border-radius: 10px; padding: 6px 9px;
+    }
+    .quick {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 10px 12px; border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.015);
+    }
+    .quick button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: #dce8fc;
+      border-radius: 999px; padding: 8px 12px; font-size: 12px;
+    }
+    .frameViewport {
+      position: relative; min-height: 0; overflow: auto;
+      background: radial-gradient(circle at top, rgba(90,162,255,.07), transparent 22%), #091220;
+      padding: 12px;
+    }
+    .frameShell {
+      position: relative;
+      width: calc(var(--pcW) * var(--scale));
+      height: calc(var(--pcH) * var(--scale));
+      margin: 10px auto 18px;
+      min-width: 260px; min-height: 180px;
+    }
+    .browserChrome {
+      position: relative;
+      height: 34px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 12px;
+      background: linear-gradient(180deg, #eef2f7, #dfe6ef);
+      border-radius: 18px 18px 0 0;
+      border: 1px solid rgba(255,255,255,.14);
+      border-bottom: 0;
+    }
+    .traffic { display: flex; gap: 6px; }
+    .traffic i { width: 10px; height: 10px; border-radius: 999px; display: block; }
+    .traffic i:nth-child(1){ background:#ff5f57; }
+    .traffic i:nth-child(2){ background:#febc2e; }
+    .traffic i:nth-child(3){ background:#28c840; }
+    .chromeTitle {
+      min-width: 0;
+      flex: 1;
+      font-size: 11px; color: #334155;
+      background: rgba(255,255,255,.7);
+      border-radius: 999px; padding: 6px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      border: 1px solid rgba(15,23,42,.08);
+    }
+    .frameInner {
+      width: var(--pcW); height: var(--pcH);
+      transform: scale(var(--scale)); transform-origin: top left;
+      overflow: hidden; border-radius: 0 0 18px 18px;
+      background: #fff;
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.14);
+    }
     iframe { width: 100%; height: 100%; border: 0; background: white; }
-    .frameNote { position: absolute; top: 22px; right: 22px; max-width: min(380px, calc(100% - 44px)); z-index: 3; border: 1px solid rgba(251,191,36,.35); background: rgba(20,15,2,.88); color: #fde68a; border-radius: 14px; padding: 10px 12px; font-size: 12px; line-height: 1.45; box-shadow: 0 18px 50px rgba(0,0,0,.28); }
+    .frameBackdrop {
+      position: absolute; inset: 18px;
+      display: grid; place-items: center; text-align: center;
+      border-radius: 20px; border: 1px dashed rgba(255,255,255,.18);
+      color: var(--muted); line-height: 1.6; padding: 22px;
+      background: rgba(255,255,255,.015);
+      pointer-events: none;
+    }
+    .frameNote {
+      position: absolute; top: 20px; right: 20px; z-index: 4;
+      max-width: min(420px, calc(100% - 40px));
+      border-radius: 16px; border: 1px solid rgba(245,158,11,.28);
+      background: rgba(40,25,4,.88); color: #fde68a;
+      padding: 11px 13px; font-size: 12px; line-height: 1.48;
+      box-shadow: 0 18px 50px rgba(0,0,0,.3);
+    }
     .frameNote.hide { display: none; }
 
-    .notesView { grid-template-columns: minmax(0,1fr) minmax(260px,40%); gap: 12px; padding: 12px; }
-    .editorWrap, .previewWrap, .launcherCard, .testGrid > div { min-height: 0; display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.035); }
-    .subHead { min-height: 42px; padding: 10px 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
-    textarea { width: 100%; height: 100%; min-height: 0; border: 0; outline: 0; resize: none; background: #030712; color: var(--text); padding: 16px; font-size: var(--fontSize); line-height: 1.55; }
-    .preview { overflow: auto; padding: 16px; white-space: pre-wrap; font-size: var(--fontSize); line-height: 1.55; }
-    .launcherView { padding: 12px; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; overflow: auto; }
-    .launcherCard { min-height: 220px; }
-    .linkGrid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 12px; }
-    .linkGrid button { border: 1px solid var(--line); background: #172033; color: var(--text); border-radius: 14px; padding: 13px; text-align: left; }
-    .testView { padding: 12px; overflow: auto; }
-    .testGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-height: 100%; }
+    .notesView { grid-template-columns: minmax(0,1fr) minmax(280px,40%); gap: 14px; padding: 14px; }
+    .editorWrap, .previewWrap, .launcherCard, .testGrid > div {
+      min-height: 0; display: grid; grid-template-rows: auto 1fr;
+      border: 1px solid var(--line); border-radius: 20px;
+      overflow: hidden; background: rgba(255,255,255,.04);
+    }
+    .subHead {
+      min-height: 46px; padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px;
+      background: rgba(255,255,255,.02);
+    }
+    textarea {
+      width: 100%; height: 100%; min-height: 0;
+      resize: none; border: 0; outline: 0;
+      background: rgba(2,6,23,.6); color: var(--text);
+      padding: 18px; line-height: 1.6; font-size: var(--fontSize);
+    }
+    .preview { overflow: auto; padding: 18px; white-space: pre-wrap; line-height: 1.6; font-size: var(--fontSize); }
+    .launcherView { padding: 14px; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; overflow: auto; }
+    .linkGrid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 14px; }
+    .linkGrid button {
+      border: 1px solid var(--line); border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      color: var(--text); padding: 14px; text-align: left;
+    }
+    .testView { padding: 14px; overflow: auto; }
+    .testGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; min-height: 100%; }
     .metricGrid { display: grid; gap: 10px; }
-    .metric { border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.04); padding: 10px; }
-    .metric label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 5px; }
+    .metric {
+      border: 1px solid var(--line); border-radius: 16px;
+      background: rgba(255,255,255,.035); padding: 12px;
+    }
+    .metric label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
     .metric strong { font-size: 15px; }
-    .touchpad { height: 160px; border: 1px dashed rgba(255,255,255,.25); border-radius: 16px; display: grid; place-items: center; text-align: center; color: var(--muted); user-select: none; touch-action: none; background: rgba(0,0,0,.19); }
-    .log { white-space: pre-wrap; font-size: 12px; line-height: 1.45; color: #d1d5db; max-height: 240px; overflow: auto; }
-    .statusbar { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; }
-    .cursor { position: fixed; z-index: 50; width: 22px; height: 22px; pointer-events: none; transform: translate(-3px,-3px); filter: drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
-    .cursor:before { content: ""; display: block; width: 0; height: 0; border-top: 20px solid white; border-right: 13px solid transparent; transform: rotate(-18deg); }
-    .presentation .sidebar, .presentation .inspector, .presentation .statusbar { display: none; }
-    .presentation .workspace { grid-template-columns: minmax(0,1fr); }
-    .presentation .topbar { opacity: .94; }
-    .presentation .tabs { display: none; }
-    .presentation .browserBar { grid-template-columns: minmax(0,1fr) auto auto; }
-    .presentation #loadInsideBtn { display: inline-block; }
+    .touchpad {
+      height: 168px; border: 1px dashed rgba(255,255,255,.22); border-radius: 20px;
+      display: grid; place-items: center; text-align: center; padding: 18px;
+      color: var(--muted); user-select: none; touch-action: none;
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+    }
+    .log { white-space: pre-wrap; font-size: 12px; line-height: 1.5; color: #dbe4f3; max-height: 260px; overflow: auto; }
+    .statusbar {
+      min-height: 50px; padding: 0 16px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      color: var(--muted); font-size: 12px;
+    }
+    .cursor {
+      position: fixed; z-index: 50; width: 22px; height: 22px; pointer-events: none;
+      transform: translate(-3px,-3px); filter: drop-shadow(0 4px 8px rgba(0,0,0,.45));
+    }
+    .cursor:before {
+      content: ""; display: block; width: 0; height: 0;
+      border-top: 20px solid white; border-right: 13px solid transparent;
+      transform: rotate(-18deg);
+    }
 
-    .command { position: fixed; inset: 0; z-index: 200; display: none; place-items: start center; padding-top: 12vh; background: rgba(0,0,0,.5); }
+    .command {
+      position: fixed; inset: 0; z-index: 200; display: none; place-items: start center;
+      padding-top: 12vh; background: rgba(0,0,0,.52);
+    }
     .command.show { display: grid; }
-    .commandBox { width: min(760px, calc(100vw - 24px)); background: #111827; border: 1px solid var(--line); border-radius: 22px; padding: 14px; box-shadow: 0 36px 120px rgba(0,0,0,.65); }
-    .commandBox input { width: 100%; border: 1px solid var(--line); border-radius: 14px; background: #030712; color: var(--text); padding: 14px; outline: 0; }
-    .commandList { display: grid; gap: 8px; margin-top: 12px; color: #d1d5db; }
-    .commandList div { border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+    .commandBox {
+      width: min(760px, calc(100vw - 24px));
+      border-radius: 24px; padding: 16px;
+      background: rgba(12,20,38,.95); border: 1px solid var(--line);
+      box-shadow: 0 36px 120px rgba(0,0,0,.65);
+    }
+    .commandBox input {
+      width: 100%; border: 1px solid var(--line);
+      border-radius: 16px; padding: 14px;
+      background: rgba(0,0,0,.35); color: white; outline: 0;
+    }
+    .commandList { display: grid; gap: 8px; margin-top: 12px; color: #dce4f2; }
+    .commandList div { border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; }
 
-    @media (max-width: 920px) {
+    .presentation .sidebar, .presentation .inspector, .presentation .statusbar, .presentation .heroStrip { display: none; }
+    .presentation .workspace { grid-template-columns: minmax(0,1fr); }
+    .presentation .app { grid-template-rows: auto 1fr; }
+    .presentation .tabs { display: none; }
+    .presentation .browserBar { grid-template-columns: minmax(0,1fr) auto auto auto; }
+
+    @media (max-width: 1100px) {
       body { overflow: auto; }
       .app { min-height: 100dvh; height: auto; }
+      .heroStrip { grid-template-columns: 1fr; }
       .workspace { grid-template-columns: 1fr; }
-      .panel { min-height: 220px; }
+      .panel { min-height: 240px; }
       .main { min-height: 72dvh; }
-      .notesView { grid-template-columns: 1fr; }
-      .launcherView { grid-template-columns: 1fr; }
-      .testGrid { grid-template-columns: 1fr; }
+      .notesView, .launcherView, .testGrid { grid-template-columns: 1fr; }
       .browserBar { grid-template-columns: 1fr; }
-      .statusbar { flex-direction: column; align-items: flex-start; }
+      .statusbar { flex-direction: column; align-items: flex-start; padding: 12px 16px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .actions { width: 100%; }
     }
     @media (orientation: portrait) { .landscapeWarn { display: inline-flex; } }
     @media (orientation: landscape) { .landscapeWarn { display: none; } }
@@ -141,6 +422,7 @@
 </head>
 <body>
   <div class="cursor" id="cursor"></div>
+
   <div class="command" id="command">
     <div class="commandBox">
       <input id="commandInput" placeholder="명령: web, notes, launcher, test, present, fit, 100, 1440" />
@@ -148,44 +430,65 @@
         <div><b>⌘/Ctrl + K</b> 명령창</div>
         <div><b>⌘/Ctrl + L</b> 주소창 포커스</div>
         <div><b>⌘/Ctrl + Enter</b> 현재 주소를 Safari 새 탭으로 열기</div>
-        <div><b>⌘/Ctrl + 1/2/3/4</b> PC Web / Notes / Launcher / Test</div>
+        <div><b>⌘/Ctrl + 1/2/3/4</b> PC Web / Notes / Launcher / Input Test</div>
       </div>
     </div>
   </div>
 
   <main class="app" id="app">
-    <header class="topbar">
+    <header class="topbar surface">
       <div class="brand">
         <div class="logo">D</div>
         <div class="title">
-          <strong>iDesk Lite v2 · PC Web Mode</strong>
-          <span>무료 웹앱 · 인터넷 화면을 PC폭 iframe으로 보기</span>
+          <div class="eyebrow"><span class="eyebrowDot"></span><span>무료 · Safari 기반 · HDMI 큰 화면 실험판</span></div>
+          <strong>iDesk Lite · Elegant Web Desk</strong>
+          <span>ChatGPT는 Safari 직접 열고, 일반 사이트는 PC 폭으로 시도하는 예쁜 대화형 워크스페이스</span>
         </div>
       </div>
       <div class="actions">
         <button class="btn primary" id="presentBtn">모니터 모드</button>
-        <button class="btn" id="fitBtn">Fit</button>
-        <button class="btn" id="biggerBtn">A+</button>
-        <button class="btn" id="smallerBtn">A-</button>
+        <button class="btn good" id="gptDirectBtn">ChatGPT 열기</button>
+        <button class="btn ghost" id="fitBtn">Fit</button>
+        <button class="btn ghost" id="biggerBtn">A+</button>
+        <button class="btn ghost" id="smallerBtn">A-</button>
       </div>
     </header>
 
+    <section class="heroStrip">
+      <div class="heroCard surface">
+        <div>
+          <div class="heroTitle">한 줄 요약</div>
+          <div class="heroText">친구가 Safari에서 이 링크를 열고 홈 화면에 추가한 뒤, HDMI 허브와 키보드/마우스를 연결하면 <b>큰 화면용 웹 작업 UI</b>를 바로 쓸 수 있게 만든 버전입니다.</div>
+          <div class="heroTags">
+            <span class="tag"><span class="dot"></span><strong>추천</strong> ChatGPT는 Safari 직접 실행</span>
+            <span class="tag"><span class="dot" style="background:var(--orange)"></span><strong>주의</strong> 모든 사이트가 iframe으로 열리진 않음</span>
+            <span class="tag"><span class="dot" style="background:var(--blue)"></span><strong>포인트</strong> PC 같은 폭과 보기 좋은 UI</span>
+          </div>
+        </div>
+      </div>
+      <div class="quickCard surface">
+        <div>
+          <div class="heroTitle">바로 쓰는 흐름</div>
+          <div class="heroText">링크 열기 → 홈 화면에 추가 → 가로모드 → HDMI 연결 → ChatGPT 열기 또는 PC Web 사용. 지금 버전은 “예쁘고 넓은 런처 + 노트 + 웹 스테이지” 느낌으로 다듬었습니다.</div>
+        </div>
+      </div>
+    </section>
+
     <section class="workspace">
-      <aside class="panel sidebar">
-        <div class="panelHead"><b>Modules</b><span class="badge landscapeWarn"><span class="dot" style="background:var(--warn)"></span>가로 권장</span></div>
+      <aside class="panel surface sidebar">
+        <div class="panelHead"><b>Modules</b><span class="badge landscapeWarn"><span class="dot" style="background:var(--orange)"></span>가로 권장</span></div>
         <div class="panelBody">
           <nav class="nav">
-            <button class="active" data-mode="web">🌐 PC Web</button>
-            <button data-mode="notes">📝 Notes</button>
-            <button data-mode="launcher">🔗 Launcher</button>
-            <button data-mode="test">🧪 Input Test</button>
+            <button class="active" data-mode="web"><span class="navLabel">🌐 PC Web</span><span class="navDesc">일반 사이트를 PC 폭으로 열어보기</span></button>
+            <button data-mode="notes"><span class="navLabel">📝 Notes</span><span class="navDesc">메모 작성 + 큰 화면 미리보기</span></button>
+            <button data-mode="launcher"><span class="navLabel">🔗 Launcher</span><span class="navDesc">자주 쓰는 링크를 빠르게 Safari로 열기</span></button>
+            <button data-mode="test"><span class="navLabel">🧪 Input Test</span><span class="navDesc">키보드/포인터/터치패드 반응 확인</span></button>
           </nav>
-          <p class="hint"><b>목표:</b> 인터넷 페이지를 1280~1920px짜리 PC 화면처럼 iframe 안에 띄워서, HDMI 미러링에서도 모바일 UI보다 넓게 보이게 합니다.</p>
-          <p class="hint"><b>한계:</b> 구글/네이버/유튜브/은행/로그인 사이트 일부는 보안 정책 때문에 iframe 안에서 안 뜰 수 있습니다. 그때는 “Safari로 열기”를 쓰세요.</p>
+          <div class="hint"><b>핵심 전략</b><br>ChatGPT, Google, YouTube처럼 보안이 강한 사이트는 <b>Safari 직접 실행</b>이 정답입니다. 대신 이 페이지는 런처와 워크스페이스 역할을 해주고, 일반 문서/위키/블로그는 앱 안에서 PC 폭으로 볼 수 있게 도와줍니다.</div>
         </div>
       </aside>
 
-      <section class="panel main">
+      <section class="panel surface main">
         <div class="tabs">
           <button class="active" data-mode="web">PC Web</button>
           <button data-mode="notes">Notes</button>
@@ -233,21 +536,25 @@
                 <button data-url="https://github.com/">GitHub</button>
                 <button data-url="https://news.ycombinator.com/">Hacker News</button>
                 <button data-url="https://www.naver.com/">Naver</button>
-                <button data-url="https://www.google.com/">Google</button>
-                <button data-url="https://www.youtube.com/">YouTube</button>
-                <button data-url="https://chatgpt.com/">ChatGPT</button>
+                <button data-url="https://www.google.com/">Google · Safari</button>
+                <button data-url="https://www.youtube.com/">YouTube · Safari</button>
+                <button data-url="https://chatgpt.com/">ChatGPT · Safari</button>
               </div>
               <div class="frameViewport" id="frameViewport">
                 <div class="frameBackdrop" id="frameBackdrop">
                   <div>
-                    <b>PC Web Mode</b><br />
-                    주소를 입력하고 “PC폭으로 열기”를 누르세요.<br />
-                    iframe이 1440px 폭으로 만들어져서 지원되는 사이트는 PC 레이아웃처럼 보입니다.<br /><br />
-                    화면이 비어 있거나 로딩이 막히면 사이트가 iframe 삽입을 차단한 것입니다.
+                    <b>PC Web Stage</b><br>
+                    주소를 입력하고 “PC폭으로 열기”를 누르세요.<br>
+                    지원되는 사이트는 1440px PC 폭처럼 보입니다.<br><br>
+                    ChatGPT/Google/YouTube는 자동으로 Safari 직접 열기를 권장합니다.
                   </div>
                 </div>
-                <div class="frameNote" id="frameNote">화면이 안 나오면 사이트 보안정책 때문입니다. “Safari로 열기” 후 Safari 메뉴에서 “데스크탑 웹 사이트 요청”을 켜세요.</div>
+                <div class="frameNote" id="frameNote">ChatGPT는 이 안에 억지로 박는 것보다 Safari에서 직접 여는 편이 훨씬 안정적입니다. Safari에서 “데스크탑 웹 사이트 요청”을 켜세요.</div>
                 <div class="frameShell" id="frameShell">
+                  <div class="browserChrome">
+                    <div class="traffic"><i></i><i></i><i></i></div>
+                    <div class="chromeTitle" id="chromeTitle">PC Preview</div>
+                  </div>
                   <div class="frameInner" id="frameInner">
                     <iframe id="webFrame" title="PC Web Frame" referrerpolicy="no-referrer-when-downgrade"></iframe>
                   </div>
@@ -259,7 +566,7 @@
           <section class="view notesView" id="notesView">
             <div class="editorWrap">
               <div class="subHead"><span>입력창</span><span id="count">0자</span></div>
-              <textarea id="note" placeholder="키보드로 메모하세요. 저장은 자동입니다.\n\n웹사이트가 iframe에서 막히면, 여기에 링크/메모를 남기고 Safari로 열면 됩니다."></textarea>
+              <textarea id="note" placeholder="키보드로 메모하세요. 저장은 자동입니다.&#10;&#10;웹사이트가 iframe에서 막히면, 여기에 링크/메모를 남기고 Safari로 열면 됩니다."></textarea>
             </div>
             <div class="previewWrap">
               <div class="subHead"><span>큰 화면 미리보기</span><span>Notes</span></div>
@@ -283,18 +590,16 @@
             </div>
             <div class="launcherCard">
               <div class="subHead"><span>친구 사용법</span><span>핵심</span></div>
-              <div class="preview">
-1. iPhone Safari에서 이 페이지 열기
+              <div class="preview">1. iPhone Safari에서 이 페이지 열기
 2. 공유 → 홈 화면에 추가
 3. 홈 화면의 iDesk Lite 실행
 4. iPhone 가로모드
 5. HDMI 허브 연결
-6. PC Web에서 주소 입력
-7. “PC폭으로 열기” 시도
+6. ChatGPT는 상단 버튼으로 Safari 직접 열기
+7. 일반 사이트는 “PC폭으로 열기” 시도
 8. 안 뜨면 “Safari로 열기” 사용
 
-Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 켜면 PC 화면에 가까워질 수 있습니다.
-              </div>
+가장 중요한 포인트는 “이 페이지 안에 모든 웹을 넣는 것”이 아니라, 보기 좋은 메인 런처와 보조 작업판을 만들어 두는 것입니다.</div>
             </div>
           </section>
 
@@ -306,7 +611,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
                   <div class="metric"><label>화면</label><strong id="screenMetric">-</strong></div>
                   <div class="metric"><label>키보드</label><strong id="keyMetric">대기 중</strong></div>
                   <div class="metric"><label>포인터</label><strong id="pointerMetric">대기 중</strong></div>
-                  <div class="touchpad" id="touchpad">터치패드 테스트<br />드래그 · 탭 · 스크롤</div>
+                  <div class="touchpad" id="touchpad">터치패드 테스트<br>드래그 · 탭 · 스크롤</div>
                 </div>
               </div>
               <div>
@@ -318,23 +623,23 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
         </div>
       </section>
 
-      <aside class="panel inspector">
-        <div class="panelHead"><b>PC 웹 기대치</b><span class="badge"><span class="dot"></span>v2</span></div>
+      <aside class="panel surface inspector">
+        <div class="panelHead"><b>기대 효과</b><span class="badge"><span class="dot"></span>예쁜 UI</span></div>
         <div class="panelBody">
           <div class="metricGrid">
-            <div class="metric"><label>앱 안 PC폭 보기</label><strong>지원 사이트는 PC 레이아웃 가능</strong></div>
-            <div class="metric"><label>차단 사이트</label><strong>Safari로 열기 필요</strong></div>
-            <div class="metric"><label>진짜 DeX 여부</label><strong>아님 · 무료 웹앱 한계</strong></div>
+            <div class="metric"><label>ChatGPT 사용성</label><strong>Safari 직접 열기 + 큰 화면 활용</strong></div>
+            <div class="metric"><label>일반 사이트</label><strong>지원되는 경우 PC 폭으로 보기</strong></div>
+            <div class="metric"><label>무료 한계</label><strong>진짜 DeX는 아님</strong></div>
             <div class="metric"><label>추천 세팅</label><strong>가로모드 + 모니터 모드 + 1440폭</strong></div>
-            <p class="hint">이 버전은 “웹사이트를 앱 안에서 1440px짜리 PC 화면처럼 렌더링해보는” 방식입니다. 모든 인터넷이 완벽하게 PC처럼 뜨는 것은 아닙니다.</p>
           </div>
+          <div class="hint"><b>요약</b><br>디자인은 훨씬 보기 좋게, 사용 흐름은 더 직관적으로 정리했습니다. 친구 입장에서는 “링크 열고, ChatGPT 바로 열고, 필요하면 노트 남기고, 일반 사이트는 PC 폭으로 시도”하는 흐름이 더 이해하기 쉽습니다.</div>
         </div>
       </aside>
     </section>
 
-    <footer class="statusbar">
-      <span>PC Web Mode: iframe PC폭 렌더링 + Safari 외부 열기</span>
-      <span>무료 한계: iOS 전체 데스크톱화/외부 모니터 분리 화면은 불가</span>
+    <footer class="statusbar surface">
+      <span>Elegant Web Desk · Safari direct for ChatGPT · PC-width preview for compatible sites</span>
+      <span>무료 웹앱 한계: iPhone/HDMI 완전 분리 화면은 불가</span>
     </footer>
   </main>
 
@@ -353,6 +658,8 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
     const frameBackdrop = $('#frameBackdrop');
     const viewport = $('#frameViewport');
     const cursor = $('#cursor');
+    const chromeTitle = $('#chromeTitle');
+
     let mode = 'web';
     let pcW = Number(localStorage.getItem('idesk_pc_w') || 1440);
     let pcH = Number(localStorage.getItem('idesk_pc_h') || 900);
@@ -403,7 +710,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
       let scale;
       if (zoomMode === 'fit') {
         const r = viewport.getBoundingClientRect();
-        scale = Math.min((r.width - 28) / pcW, (r.height - 28) / pcH);
+        scale = Math.min((r.width - 28) / pcW, (r.height - 62) / (pcH + 34));
         scale = Math.max(0.25, Math.min(1, scale));
       } else {
         scale = Number(zoomMode);
@@ -414,13 +721,40 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
       $('#scaleMetric').textContent = `${pcW}×${pcH} @ ${Math.round(scale * 100)}%`;
     }
 
+    function directOnlyReason(url) {
+      try {
+        const host = new URL(url).hostname.replace(/^www\./, '').toLowerCase();
+        if (host === 'chatgpt.com' || host.endsWith('.chatgpt.com')) return 'ChatGPT는 로그인/보안 정책 때문에 iframe보다 Safari 직접 실행이 안정적입니다.';
+        if (host === 'google.com' || host.endsWith('.google.com')) return 'Google 계열은 iframe 차단이 흔해서 Safari 직접 실행이 안정적입니다.';
+        if (host === 'youtube.com' || host.endsWith('.youtube.com')) return 'YouTube는 iframe/로그인/재생 정책 때문에 Safari 직접 실행이 안정적입니다.';
+        if (host === 'naver.com' || host.endsWith('.naver.com')) return 'Naver는 iframe 차단 가능성이 높아서 Safari 직접 실행을 권장합니다.';
+      } catch (e) {}
+      return '';
+    }
+
+    function showDirectNotice(url, reason) {
+      frame.removeAttribute('src');
+      frameNote.classList.remove('hide');
+      frameBackdrop.style.display = 'grid';
+      frameBackdrop.innerHTML = `<div><b>Safari로 직접 열었습니다</b><br>${reason}<br><br>주소: ${url}<br>Safari에서 메뉴를 열고 “데스크탑 웹 사이트 요청”을 켜세요.</div>`;
+      chromeTitle.textContent = 'Safari Direct Recommended';
+      setTimeout(() => frameNote.classList.add('hide'), 9000);
+    }
+
     function loadInside(value) {
       const url = normaliseUrl(value || urlInput.value);
       if (!url) return;
       urlInput.value = url;
       localStorage.setItem('idesk_last_url', url);
+      const reason = directOnlyReason(url);
+      if (reason) {
+        showDirectNotice(url, reason);
+        openSafari(url);
+        return;
+      }
       frameBackdrop.style.display = 'none';
       frameNote.classList.remove('hide');
+      chromeTitle.textContent = url;
       frame.src = url;
       log('load iframe: ' + url);
       setTimeout(() => frameNote.classList.add('hide'), 9000);
@@ -432,6 +766,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
       if (!url) return;
       urlInput.value = url;
       localStorage.setItem('idesk_last_url', url);
+      chromeTitle.textContent = url;
       log('open safari: ' + url);
       window.open(url, '_blank', 'noopener,noreferrer');
     }
@@ -440,6 +775,8 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
       frame.removeAttribute('src');
       frameBackdrop.style.display = 'grid';
       frameNote.classList.remove('hide');
+      chromeTitle.textContent = 'PC Preview';
+      frameBackdrop.innerHTML = `<div><b>PC Web Stage</b><br>주소를 입력하고 “PC폭으로 열기”를 누르세요.<br>지원되는 사이트는 1440px PC 폭처럼 보입니다.<br><br>ChatGPT/Google/YouTube는 자동으로 Safari 직접 열기를 권장합니다.</div>`;
       log('frame cleared');
     }
 
@@ -486,6 +823,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
     $$('[data-open]').forEach(btn => btn.addEventListener('click', () => openSafari(btn.dataset.open)));
     $('#loadInsideBtn').addEventListener('click', () => loadInside());
     $('#openSafariBtn').addEventListener('click', () => openSafari());
+    $('#gptDirectBtn').addEventListener('click', () => { urlInput.value = 'https://chatgpt.com/'; openSafari('https://chatgpt.com/'); });
     $('#clearFrameBtn').addEventListener('click', clearFrame);
     $('#presentBtn').addEventListener('click', togglePresentation);
     $('#fitBtn').addEventListener('click', () => { $('#zoomSelect').value = 'fit'; updateScale(); });
@@ -496,9 +834,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
     $('#zoomSelect').addEventListener('change', updateScale);
     $('#clearLogBtn').addEventListener('click', () => { logEl.textContent = ''; });
     note.addEventListener('input', renderNotes);
-    urlInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') loadInside();
-    });
+    urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loadInside(); });
     frame.addEventListener('load', () => log('iframe load event'));
 
     document.addEventListener('keydown', (e) => {
@@ -532,9 +868,7 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
       toggleCommand();
     });
 
-    document.addEventListener('pointermove', (e) => {
-      cursorPos.x = e.clientX; cursorPos.y = e.clientY; moveCursor(0,0);
-    }, { passive: true });
+    document.addEventListener('pointermove', (e) => { cursorPos.x = e.clientX; cursorPos.y = e.clientY; moveCursor(0,0); }, { passive: true });
     document.addEventListener('pointerdown', (e) => log(`pointer down: ${Math.round(e.clientX)}, ${Math.round(e.clientY)}`), { passive: true });
     document.addEventListener('wheel', (e) => log(`wheel: ${Math.round(e.deltaX)}, ${Math.round(e.deltaY)}`), { passive: true });
 
@@ -556,8 +890,8 @@ Safari로 연 뒤에는 메뉴에서 “데스크탑 웹 사이트 요청”을 
     moveCursor(0,0);
     renderNotes();
     const lastUrl = localStorage.getItem('idesk_last_url');
-    if (lastUrl) urlInput.value = lastUrl;
-    log('ready v2 pc web mode');
+    if (lastUrl) { urlInput.value = lastUrl; chromeTitle.textContent = lastUrl; }
+    log('ready elegant web desk');
   </script>
 </body>
 </html>
